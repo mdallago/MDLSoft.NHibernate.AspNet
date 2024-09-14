@@ -1,6 +1,6 @@
 ﻿using System.Web;
 //using System.Web.Mvc;
-//using log4net;
+using log4net;
 using MDLSoft.NHibernate.MultiSessionFactory;
 using NHibernate;
 
@@ -9,7 +9,7 @@ namespace MDLSoft.NHibernate.AspNet
     public class NHSessionWebModule : IHttpModule
     {
         public const string SESSION_FACTORY_PROVIDER_KEY = "NHSession.SessionFactoryProvider";
-        //private static readonly ILog log = LogManager.GetLogger(typeof(NHSessionWebModule));
+        private static readonly ILog log = LogManager.GetLogger(typeof(NHSessionWebModule));
         private ISessionFactoryProvider sfp;
 
         public static void Setup(ISessionFactoryProvider sessionFactoryProvider)
@@ -19,7 +19,7 @@ namespace MDLSoft.NHibernate.AspNet
 
         public void Init(HttpApplication context)
         {
-            //log.Debug("Obtaining SessionFactoryProvider from Application context.");
+            log.Debug("Obtaining SessionFactoryProvider from Application context.");
 
             sfp = context.Application[SESSION_FACTORY_PROVIDER_KEY] as ISessionFactoryProvider;
 

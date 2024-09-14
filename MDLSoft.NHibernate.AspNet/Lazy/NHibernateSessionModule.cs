@@ -2,14 +2,14 @@
 using System.Net;
 using System.Web;
 using MDLSoft.NHibernate.MultiSessionFactory;
-//using log4net;
+using log4net;
 using NHibernate;
 
 namespace MDLSoft.NHibernate.AspNet.Lazy
 {
     public class NHibernateSessionModule : IHttpModule
     {
-        //private static readonly ILog Log = LogManager.GetLogger(typeof(NHibernateSessionModule));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(NHibernateSessionModule));
         private ISessionFactoryProvider sfp;
 
         public void Init(HttpApplication context)
@@ -88,9 +88,9 @@ namespace MDLSoft.NHibernate.AspNet.Lazy
                     transaction.Commit();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //Log.Error("Error guadardando datos en la DB ", ex);
+                Log.Error("Error guadardando datos en la DB ", ex);
                 HttpContext.Current.Response.TrySkipIisCustomErrors = true;
                 HttpContext.Current.Response.Clear();
                 HttpContext.Current.Response.StatusCode = (int)HttpStatusCode.BadRequest;
