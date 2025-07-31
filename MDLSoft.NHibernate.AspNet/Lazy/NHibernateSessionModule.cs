@@ -46,38 +46,18 @@ namespace MDLSoft.NHibernate.AspNet.Lazy
         private void ContextEndRequest(object sender, EventArgs e)
         {
             HttpContext context = ((HttpApplication)sender).Context;
-
-            if (context != null && context.Items.Contains(SessionFactoryProviderKeys.KEY_EXCEPTION))
-            {
-                Rollback();
-                return;
-            }
+            bool rollback = context != null && context.Items.Contains(SessionFactoryProviderKeys.KEY_EXCEPTION);
 
             foreach (var sf in sfp)
             {
                 var session = LazySessionContext.UnBind(sf);
                 if (session == null)
                     continue;
-                EndSession(session);
+                EndSession(session, rollback);
             }
         }
 
-        private void Rollback()
-        {
-            foreach (var sf in sfp)
-            {
-                var s = sf.GetCurrentSession();
-
-                var transction = s.GetCurrentTransaction();
-
-                if (transction != null && transction.IsActive)
-                {
-                    transction.Rollback();
-                }
-            }
-        }
-
-        private void EndSession(ISession session)
+        private static void EndSession(ISession session, bool rollback)
         {
             try
             {
@@ -85,7 +65,14 @@ namespace MDLSoft.NHibernate.AspNet.Lazy
 
                 if (transaction != null && transaction.IsActive)
                 {
-                    transaction.Commit();
+                    if (rollback)
+                    {
+                        transaction.Rollback();
+                    }
+                    else
+                    {
+                        transaction.Commit();
+                    }
                 }
             }
             catch (Exception ex)

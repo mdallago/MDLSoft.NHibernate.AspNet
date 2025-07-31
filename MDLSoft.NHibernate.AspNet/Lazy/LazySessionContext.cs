@@ -43,7 +43,7 @@ namespace MDLSoft.NHibernate.AspNet.Lazy
             map[sessionFactory] = sessionInitializer;
         }
 
-      
+
         /// <summary>
         /// Unbind the current session of the session factory.
         /// </summary>
@@ -52,9 +52,15 @@ namespace MDLSoft.NHibernate.AspNet.Lazy
         public static ISession UnBind(ISessionFactory sessionFactory)
         {
             var map = GetCurrentFactoryMap();
-            var sessionInitializer = map[sessionFactory];
+
+            if (!map.TryGetValue(sessionFactory, out var sessionInitializer))
+            {
+                return null;
+            }
+
             map[sessionFactory] = null;
-            if (sessionInitializer == null || !sessionInitializer.IsValueCreated) return null;
+            if (sessionInitializer == null || !sessionInitializer.IsValueCreated)
+                return null;
             return sessionInitializer.Value;
         }
 
