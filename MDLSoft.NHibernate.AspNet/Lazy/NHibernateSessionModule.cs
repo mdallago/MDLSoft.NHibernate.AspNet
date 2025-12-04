@@ -27,6 +27,12 @@ namespace MDLSoft.NHibernate.AspNet.Lazy
 
         private void ContextBeginRequest(object sender, EventArgs e)
         {
+            if (sfp == null)
+            {
+                Log.Warn("Session factory provider not configured");
+                return;
+            }
+
             foreach (var sf in sfp)
             {
                 var localFactory = sf;
@@ -45,6 +51,12 @@ namespace MDLSoft.NHibernate.AspNet.Lazy
 
         private void ContextEndRequest(object sender, EventArgs e)
         {
+            if (sfp == null)
+            {
+                Log.Warn("Session factory provider not configured");
+                return;
+            }
+
             HttpContext context = ((HttpApplication)sender).Context;
             bool rollback = context != null && context.Items.Contains(SessionFactoryProviderKeys.KEY_EXCEPTION);
 
@@ -77,11 +89,11 @@ namespace MDLSoft.NHibernate.AspNet.Lazy
             }
             catch (Exception ex)
             {
-                Log.Error("Error guadardando datos en la DB ", ex);
+                Log.Error("Error commiting transaction", ex);
                 HttpContext.Current.Response.TrySkipIisCustomErrors = true;
                 HttpContext.Current.Response.Clear();
                 HttpContext.Current.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                HttpContext.Current.Response.Write("Error al procesar la solicitud");
+                HttpContext.Current.Response.Write("Error processing request");
             }
             finally
             {
