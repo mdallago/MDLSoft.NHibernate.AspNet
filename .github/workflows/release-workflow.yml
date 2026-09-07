@@ -30,12 +30,12 @@ jobs:
     
     steps:
     - name: 🛒 Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0  # Fetch full history for changelog generation
     
     - name: ⚙️ Setup .NET
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '8.0.x'
 
@@ -165,7 +165,7 @@ jobs:
       run: dotnet pack --configuration Release --no-build --output ./artifacts
     
     - name: 🚀 Create GitHub Release and Tag
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         tag_name: ${{ steps.version.outputs.TAG }}
         name: ${{ steps.version.outputs.TAG }}

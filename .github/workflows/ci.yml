@@ -25,12 +25,12 @@ jobs:
     
     steps:
     - name: 🛒 Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
     
     - name: ⚙️ Setup .NET
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: |
           6.0.x
@@ -47,7 +47,7 @@ jobs:
     
     - name: 📊 Upload coverage to Codecov
       if: matrix.os == 'ubuntu-latest'
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v7
       with:
         directory: ./coverage
         fail_ci_if_error: false
@@ -60,12 +60,12 @@ jobs:
     
     steps:
     - name: 🛒 Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
     
     - name: ⚙️ Setup .NET
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '8.0.x'
     
@@ -82,7 +82,7 @@ jobs:
       run: dotnet pack --configuration Release --no-build --output ${{ env.NuGetDirectory }}
     
     - name: 📤 Upload NuGet package artifacts
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v7
       with:
         name: nuget-packages
         if-no-files-found: error
@@ -95,12 +95,12 @@ jobs:
     
     steps:
     - name: ⚙️ Setup .NET
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '8.0.x'
     
     - name: 📥 Download NuGet package artifacts
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v8
       with:
         name: nuget-packages
         path: ${{ env.NuGetDirectory }}
@@ -193,7 +193,7 @@ jobs:
     
     steps:
     - name: 🛒 Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v7
     
     - name: 🔒 Initialize CodeQL
       uses: github/codeql-action/init@v4
@@ -201,7 +201,7 @@ jobs:
         languages: csharp
     
     - name: ⚙️ Setup .NET
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '8.0.x'
     
