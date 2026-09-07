@@ -73,7 +73,7 @@ jobs:
     
     - name: 📝 Update project version
       run: |
-        $projectFile = "MDLSoft.StringParsers/MDLSoft.StringParsers.csproj"
+        $projectFile = "MDLSoft.NHibernate.AspNet/MDLSoft.NHibernate.AspNet.csproj"
         $version = "${{ steps.version.outputs.VERSION }}"
         
         if (-not (Test-Path $projectFile)) {
@@ -128,7 +128,7 @@ jobs:
             
             $releaseNotes += "`n`n**Full Changelog**: https://github.com/${{ github.repository }}/compare/$previousTag...$tag"
           } else {
-            $releaseNotes = "## 🎉 Release $tag This release includes the latest updates and improvements to MDLSoft.StringParsers.**Full Changelog**: https://github.com/${{ github.repository }}/commits/$tag"
+            $releaseNotes = "## 🎉 Release $tag This release includes the latest updates and improvements to MDLSoft.NHibernate.AspNet.**Full Changelog**: https://github.com/${{ github.repository }}/commits/$tag"
           }
         }
         
@@ -149,7 +149,7 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        git add MDLSoft.StringParsers/MDLSoft.StringParsers.csproj
+        git add MDLSoft.NHibernate.AspNet/MDLSoft.NHibernate.AspNet.csproj
         git commit -m "chore: bump version to $version"
 
     - name: 📦 Restore dependencies
