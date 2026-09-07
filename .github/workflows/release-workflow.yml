@@ -26,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write  # Required to create releases and tags
+      id-token: write  # enable GitHub OIDC token issuance for this job
     
     steps:
     - name: 🛒 Checkout code
@@ -176,13 +177,21 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
+    
+     # Get a short-lived NuGet API key
+    - name: NuGet login (OIDC → temp API key)
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{ secrets.NUGET_USER }}
+    
     - name: 🚀 Publish to NuGet
       run: |
         $files = Get-ChildItem ./artifacts -Filter "*.nupkg"
         foreach($file in $files) {
           Write-Host "Publishing package: $($file.Name)"
           dotnet nuget push $file.FullName `
-            --api-key ${{ secrets.NUGET_API_KEY }} `
+            --api-key ${{ steps.login.outputs.NUGET_API_KEY }} `
             --source https://api.nuget.org/v3/index.json `
             --skip-duplicate
         }
