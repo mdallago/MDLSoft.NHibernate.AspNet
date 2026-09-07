@@ -87,14 +87,14 @@ namespace MDLSoft.NHibernate.AspNet.Lazy
                     }
                 }
             }
-            catch (Exception ex)
+            /*catch (Exception ex)
             {
                 Log.Error("Error commiting transaction", ex);
                 HttpContext.Current.Response.TrySkipIisCustomErrors = true;
                 HttpContext.Current.Response.Clear();
                 HttpContext.Current.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 HttpContext.Current.Response.Write("Error processing request");
-            }
+            }*/
             finally
             {
                 session.Dispose();
